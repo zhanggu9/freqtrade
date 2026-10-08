@@ -1681,12 +1681,13 @@ class Alpacastocks(Stockexchange):
             symbol_or_symbols=symbol,
             start=start_dt,
             end=end_dt,
-            limit=min(requested_limit, 10000),
+            limit=None, # min(requested_limit, 10000),
             timeframe=self.convert_timeframe(timeframe),
             adjustment=self._parse_adjustment(params.get("adjustment", self.adjustment.value)),
             feed=self._parse_data_feed(params.get("feed", self.data_feed.value)),
             sort=Sort.ASC,
             currency="USD",
+            extended_hours=True,  # ← 이 줄을 추가
         )
 
         try:
@@ -1709,7 +1710,7 @@ class Alpacastocks(Stockexchange):
         df = df.sort_values("date").drop_duplicates("date").reset_index(drop=True)
 
         # CCXT/Freqtrade limit means number of returned candles, not page size.
-        if len(df) > requested_limit:
+        if since_ms is None and len(df) > requested_limit:
             df = df.iloc[:requested_limit].copy()
         return df[["date", "open", "high", "low", "close", "volume"]]
 
