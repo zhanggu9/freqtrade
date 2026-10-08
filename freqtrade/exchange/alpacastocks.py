@@ -1681,7 +1681,7 @@ class Alpacastocks(Stockexchange):
             symbol_or_symbols=symbol,
             start=start_dt,
             end=end_dt,
-            limit=None, # min(requested_limit, 10000),
+            limit=None,  # min(requested_limit, 10000),
             timeframe=self.convert_timeframe(timeframe),
             adjustment=self._parse_adjustment(params.get("adjustment", self.adjustment.value)),
             feed=self._parse_data_feed(params.get("feed", self.data_feed.value)),
